@@ -9,7 +9,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 bg-[#0f172a] text-slate-300 h-screen flex flex-col">
+    <aside className="w-64 bg-[#0f172f] text-slate-300 h-screen flex flex-col">
 
       <div className="p-6 border-b border-slate-800 flex items-center justify-center">
         <h1 className="text-white font-black text-2xl uppercase tracking-wider">
