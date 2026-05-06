@@ -1,81 +1,39 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-import { loginUser } from '../Slices/authSlice';
-const Login = () => {
-  const [errorMessage, setErrorMessage] = useState('');
-  const inputRef = useRef(null);
-  const error =useSelector((state) => state.auth.error);
+import { useDispatch } from 'react-redux';
+import { login } from '../Slices/authSlice';
+import { useNavigate } from 'react-router-dom';
+
+// 1. ضروري تجمع كلشي وسط function
+export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleLogin = (e) => {
     e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-    dispatch(loginUser({ email, password })).then(() => {
-      navigate('/');
-    });
-  }
-  useEffect(() => {
-    if (error) {
-      setErrorMessage("mot de passe ou email incorrect");
-    } }, [error]);
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [])
+    // Kanchoufou ghi wach dakhhal ay 7aja
+    dispatch(login({ name: "Abderrahmane" }));
+    navigate('/'); // Siftu l-Dashboard
+  };
+
+  // 2. ضروري دير return للديزاين باش متبقاش الصفحة بيضا
   return (
-    <div className='flex items-center justify-center min-h-screen bg-blue-50'>
-      <div className='bg-white p-8 shadow-lg w-full max-w-md'>
-        <h1 className='text-2xl font-bold mb-6 text-center text-gray-800'>Connexion</h1>
-
-        <form className='flex flex-col gap-4' onSubmit={(e) => handleLogin(e)}>
-          <div>
-            <label className='block text-sm font-medium mb-1 text-gray-700'>Email</label>
-            <input
-              ref={inputRef}
-              type='email'
-              placeholder='votre@email.com'
-              className='w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500'
-              id="email"
-              name='email'
-              required
-            />
-          </div>
-
-          <div>
-            <label className='block text-sm font-medium mb-1 text-gray-700'>Mot de passe</label>
-            <input
-              type='password'
-              placeholder='Mot de passe'
-              className='w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500'
-              id="password"
-              name='password'
-              required
-            />
-          </div>
-
-          <div className='min-h-12 flex items-center justify-center'>{error && <p className='text-sm text-red-600 bg-red-50 p-2 rounded text-center w-full'>{errorMessage}</p>}</div>
-
-          <button
-            type='submit'
-            className='bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-medium'
-          >
-            Se connecter
-          </button>
-        </form>
-
-        <p className='text-sm text-gray-600 text-center mt-4'>
-          Pas de compte ?{' '}
-          <Link to="/register" className='text-blue-600 hover:text-blue-700 font-medium'>
-            S'inscrire
-          </Link>
+    <div className="flex h-screen items-center justify-center bg-slate-50">
+      <form 
+        onSubmit={handleLogin} 
+        className="p-8 bg-white rounded-xl shadow-md w-96 flex flex-col gap-4"
+      >
+        <h2 className="text-2xl font-bold text-center text-slate-800">Connexion</h2>
+        
+        <p className="text-sm text-slate-500 text-center mb-4">
+          Cliquez sur le bouton pour tester Redux et entrer au Dashboard.
         </p>
-      </div>
+
+        <button 
+          type="submit" 
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+        >
+          Se Connecter
+        </button>
+      </form>
     </div>
   );
-};
-
-export default Login;
-
+}
