@@ -1,13 +1,20 @@
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, Package, Users, LogOut } from 'lucide-react';
-
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../../Slices/authSlice';
+import { useNavigate } from 'react-router-dom';
 export default function Sidebar() {
   const menuItems = [
     { name: 'Tableau de bord', path: '/', icon: LayoutDashboard },
     { name: 'Produits', path: '/products', icon: Package },
     { name: 'Fournisseurs', path: '/suppliers', icon: Users },
   ];
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate('/login');
+  }
   return (
     <aside className="w-64 bg-[#0f172f] text-slate-300 h-screen flex flex-col">
 
@@ -37,7 +44,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="p-6 border-t border-slate-800">
-        <button className="flex items-center gap-3 text-slate-400 hover:text-red-400 transition-colors w-full px-4 py-2 rounded-lg hover:bg-slate-800/50">
+        <button className="flex items-center gap-3 text-slate-400 hover:text-red-400 transition-colors w-full px-4 py-2 rounded-lg hover:bg-slate-800/50" onClick={()=>handleLogout()}>
           <LogOut size={20} />
           <span className="font-medium">Déconnexion</span>
         </button>
