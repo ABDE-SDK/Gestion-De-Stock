@@ -7,6 +7,7 @@ const axiosInstance= axios.create({
         'Content-Type':'application/json',
     }
 })
+// Intercepteur pour AJOUTER le token à chaque requête
 axiosInstance.interceptors.request.use(
     (config)=>{
         const token=localStorage.getItem('token')
@@ -16,5 +17,15 @@ axiosInstance.interceptors.request.use(
         return config
     }
     ,(error)=>Promise.reject(error)
+)
+// Intercepteur pour GÉRER les erreurs (ex: token expiré)
+axiosInstance.interceptors.request.use(
+    (response)=>response,
+    (error)=>{
+        if (error.response && error.response.status === 401) {
+            localStorage.removeItem('token')
+        }
+        return Promise.reject(error)
+    }
 )
 export default axiosInstance

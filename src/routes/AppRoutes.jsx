@@ -1,17 +1,23 @@
 import { Routes, Route } from 'react-router-dom';
 import MainLayout from '../layout/MainLayout';
 import Dashboard from '../pages/Dashboard';
-
-// صفحة مؤقتة للسلعة باش نتيستيو
-const Products = () => <div className="p-6 text-2xl font-bold">Gestion des Produits 📦</div>;
+import Products from '../pages/Products';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
+import Suppliers from '../pages/Suppliers';
 
 const AppRoutes = () => {
   return (
     <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Dashboard />} />
-        <Route path="products" element={<Products />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/fournisseurs" element={<Suppliers />} />
       </Route>
+
     </Routes>
   );
 };
