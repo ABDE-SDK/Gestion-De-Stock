@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, Package, ArrowRightLeft, ShoppingCart, Truck, Users, LogOut } from 'lucide-react';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../Slices/authSlice';
+import { logout } from '../../app/Slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 
 export default function Sidebar() {

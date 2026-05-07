@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { login } from '../Slices/authSlice';
+import { login } from '../app/Slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 
 // 1. ضروري تجمع كلشي وسط function
