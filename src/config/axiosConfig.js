@@ -19,7 +19,7 @@ axiosInstance.interceptors.request.use(
     ,(error)=>Promise.reject(error)
 )
 // Intercepteur pour GÉRER les erreurs (ex: token expiré)
-axiosInstance.interceptors.request.use(
+axiosInstance.interceptors.response.use(
     (response)=>response,
     (error)=>{
         if (error.response && error.response.status === 401) {
