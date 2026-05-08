@@ -33,7 +33,7 @@ export const authSlice =createSlice({
     name:'auth',
     initialState,
     reducers:{
-        logoutUser:()=>{
+        logout:()=>{
             localStorage.removeItem("token")
         },
         setCredentials:(state,action)=>{

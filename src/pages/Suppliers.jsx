@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo,useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSuppliers, deleteSupplierAsync, updateSupplierAsync ,createSupplierAsync} from '../Slices/SuppliersSlice';
+import { fetchSuppliers, deleteSupplierAsync, updateSupplierAsync ,createSupplierAsync} from '../app/Slices/SuppliersSlice.jsx';
 import { useSearchParams} from 'react-router-dom';
 import AjouterFournisseur from '../components/AjouterFournisseur.jsx';
 import * as XLSX from 'xlsx'
