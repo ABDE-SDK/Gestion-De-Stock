@@ -1,9 +1,6 @@
-import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { createSupplierAsync } from '../../app/Slices/SuppliersSlice';
-import { useSelector } from 'react-redux';
+
 export default function AjouterFournisseur({ onAdd ,onClose}) {
-  const suppliers=useSelector(state=>state.suppliers.list)
 
   return createPortal(
 <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-[2px]'>
