@@ -8,9 +8,11 @@ const initialState = {
 
 export const fetchSuppliers = createAsyncThunk(
   'suppliers/fetchAll',
-  async (_, { rejectWithValue }) => {
+  async (userId, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get('/suppliers');
+      const response = await axiosInstance.get('/suppliers',{params:{
+        user_id: userId
+      }});
       return response.data;
     } catch (error) {
       return rejectWithValue(error?.response?.data?.message || error.message);
@@ -23,19 +25,19 @@ const suppliersSlice = createSlice({
   initialState,
   reducers: {
     addSupplier: (state, action) => {
-      state.suppliers.push(action.payload);
+      state.list.push(action.payload);
     },
     updateSupplier: (state, action) => {
       const index = state.suppliers.findIndex((item) => item.id === action.payload.id);
       if (index !== -1) {
-        state.suppliers[index] = {
-          ...state.suppliers[index],
+        state.list[index] = {
+          ...state.list[index],
           ...action.payload,
         };
       }
     },
     removeSupplier: (state, action) => {
-      state.suppliers = state.suppliers.filter((item) => item.id !== action.payload);
+      state.suppliers = state.list.filter((item) => item.id !== action.payload);
     },
   },
   extraReducers: (builder) => {

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import AppRoutes from './routes/AppRoutes'
-import {setCredentials,logoutUser,loginUser} from "./Slices/authSlice"
+import {setCredentials,logout,loginUser} from "./app/Slices/authSlice"
 import { useNavigate } from 'react-router-dom'
 import axiosInstance from './config/axiosConfig'
 function App() {
@@ -19,7 +19,7 @@ function App() {
       catch(error){
          console.error("error; "+error)
          localStorage.removeItem('token')
-         dispatch(logoutUser())
+         dispatch(logout())
          navigate("/login")
       }
     }

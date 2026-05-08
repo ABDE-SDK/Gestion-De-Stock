@@ -10,7 +10,7 @@ export default function Sidebar() {
     { name: 'Produits', path: '/products', icon: Package },
     { name: 'Mouvements', path: '/mouvements', icon: ArrowRightLeft }, 
     { name: 'Ventes', path: '/ventes', icon: ShoppingCart }, 
-    { name: 'Fournisseurs', path: '/fournisseurs', icon: Truck }, 
+    { name: 'Fournisseurs', path: '/suppliers', icon: Truck }, 
     { name: 'Clients', path: '/clients', icon: Users }, 
   ];
 

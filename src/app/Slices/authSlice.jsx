@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axiosInstance from '../config/axiosConfig';
+import axiosInstance from '../../config/axiosConfig';
 
 const initialState = {
   loading: false,
@@ -33,8 +33,10 @@ export const authSlice =createSlice({
     name:'auth',
     initialState,
     reducers:{
-        logout:()=>{
+        logout:(state)=>{
             localStorage.removeItem("token")
+            state.token=null 
+            state.user=null
         },
         setCredentials:(state,action)=>{
             // gestion de la persistance
@@ -55,7 +57,7 @@ export const authSlice =createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload || action.error.message;
       })
       // register extrareducer
       .addCase(register.pending, (state) => {
@@ -71,4 +73,4 @@ export const authSlice =createSlice({
   }});
 
 export default authSlice.reducer;
-export const { logoutUser, setCredentials } = authSlice.actions;
+export const { logout, setCredentials } = authSlice.actions;
