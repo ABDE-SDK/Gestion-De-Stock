@@ -185,7 +185,10 @@ app.get('/products', (req, res) => {
   console.log('GET /products - user_id param:', user_id);
   if (user_id) {
     const userIdNum = Number(user_id);
+    console.log('Filtering products by user_id:', userIdNum);
+    console.log('All products:', products);
     const filtered = products.filter((p) => p.user_id === userIdNum);
+    console.log('Filtered products:', filtered);
     return res.json(filtered);
   }
   res.json(products);
@@ -203,6 +206,13 @@ app.post('/products', (req, res) => {
   const { name, description, quantity, price, category, barcode, min_stock, user_id, supplier_id } = req.body;
   if (!name) {
     return res.status(400).json({ message: 'Product name is required' });
+  }
+  // Check barcode uniqueness (if provided and not empty)
+  if (barcode && barcode.trim() !== '') {
+    const existing = products.find((p) => p.barcode === barcode);
+    if (existing) {
+      return res.status(400).json({ message: 'Barcode already exists' });
+    }
   }
   const newProduct = {
     id: products.length ? Math.max(...products.map((item) => item.id)) + 1 : 1,
@@ -226,16 +236,51 @@ app.put('/products/:id', (req, res) => {
   if (!product) {
     return res.status(404).json({ message: 'Product not found' });
   }
-  const { name, description, quantity, price, category, barcode, min_stock, user_id, supplier_id } = req.body;
-  product.name = name || product.name;
-  product.description = description !== undefined ? description : product.description;
-  product.quantity = quantity !== undefined ? quantity : product.quantity;
-  product.price = price !== undefined ? price : product.price;
-  product.category = category !== undefined ? category : product.category;
-  product.barcode = barcode !== undefined ? barcode : product.barcode;
-  product.min_stock = min_stock !== undefined ? min_stock : product.min_stock;
-  product.user_id = user_id !== undefined ? user_id : product.user_id;
-  product.supplier_id = supplier_id !== undefined ? supplier_id : product.supplier_id;
+  const { name, quantity, price, category, barcode, min_stock, user_id, supplier_id } = req.body;
+  
+  // Validation des types
+  if (name !== undefined) {
+    if (typeof name !== 'string' || name.trim().length === 0) {
+      return res.status(400).json({ message: 'Name must be a non-empty string' });
+    }
+    product.name = name.trim();
+  }
+  if (quantity !== undefined) {
+    const qty = Number(quantity);
+    if (isNaN(qty) || qty < 0 || !Number.isInteger(qty)) {
+      return res.status(400).json({ message: 'Quantity must be a non-negative integer' });
+    }
+    product.quantity = qty;
+  }
+  if (price !== undefined) {
+    const prc = Number(price);
+    if (isNaN(prc) || prc < 0) {
+      return res.status(400).json({ message: 'Price must be a non-negative number' });
+    }
+    product.price = Math.round(prc * 100) / 100; // 2 décimales max
+  }
+  if (category !== undefined) product.category = category;
+  if (barcode !== undefined) {
+    if (typeof barcode !== 'string' || !/^\d{8,13}$/.test(barcode)) {
+      return res.status(400).json({ message: 'Barcode must be 8-13 digits' });
+    }
+    // Check barcode uniqueness (exclude current product)
+    const existing = products.find((p) => p.barcode === barcode && p.id !== productId);
+    if (existing) {
+      return res.status(400).json({ message: 'Barcode already exists on another product' });
+    }
+    product.barcode = barcode;
+  }
+  if (min_stock !== undefined) {
+    const minStock = Number(min_stock);
+    if (isNaN(minStock) || minStock < 0 || !Number.isInteger(minStock)) {
+      return res.status(400).json({ message: 'Min stock must be a non-negative integer' });
+    }
+    product.min_stock = minStock;
+  }
+  if (user_id !== undefined) product.user_id = Number(user_id);
+  if (supplier_id !== undefined) product.supplier_id = Number(supplier_id);
+  
   res.json(product);
 });
 

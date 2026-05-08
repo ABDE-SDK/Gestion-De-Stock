@@ -2,8 +2,8 @@ import { useEffect, useState, useMemo,useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSuppliers, deleteSupplierAsync, updateSupplierAsync ,createSupplierAsync} from '../app/Slices/SuppliersSlice.jsx';
 import { useSearchParams} from 'react-router-dom';
-import AjouterFournisseur from '../components/AjouterFournisseur.jsx';
-import TableFournisseurs from '../components/TableFournisseurs.jsx';
+import AjouterFournisseur from '../components/ui/AjouterFournisseur.jsx';
+import TableFournisseurs from '../components/ui/TableFournisseurs.jsx';
 import * as XLSX from 'xlsx'
 export default function Fournisseurs() {
   const user = useSelector((state) => state.auth.user);
@@ -25,7 +25,7 @@ export default function Fournisseurs() {
       }))
       setIsOpen(false)
     };
-  const { suppliers: allSuppliers = [], loading = false, error = '' } = useSelector((state) => state.suppliers || {});
+  const { list: allSuppliers = [], loading = false, error = '' } = useSelector((state) => state.suppliers || {});
   
   // ID du fournisseur en cours d'édition (null = aucun)
   const [editingId, setEditingId] = useState(null);
@@ -68,10 +68,23 @@ export default function Fournisseurs() {
    raw.forEach(f=>{
     const exists=allSuppliers.find(fournisseur=>fournisseur.email===f.email)
     if(exists){
-        dispatch(updateSupplierAsync({id:exists.id,...f}))
+        dispatch(updateSupplierAsync({id:exists.id,
+          name:f.name,
+          phone:f.phone,
+          email:f.email,
+          city:f.city,
+          category:f.category,
+        }))
     }
     else{
-        dispatch(createSupplierAsync(f))
+        dispatch(createSupplierAsync({id:allSuppliers[allSuppliers.length-1].id+1,
+          name:f.name,
+          phone:f.phone,
+          email:f.email,
+          city:f.city,
+          category:f.category,
+          user_id:user?.id
+        }))
     }
    })
 

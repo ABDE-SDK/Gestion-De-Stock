@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosInstance= axios.create({
     baseURL: 'http://localhost:3001',  // Use relative paths to leverage Vite proxy
-    timeout: 5000,
+    timeout: 10000,
     headers:{
         'Content-Type':'application/json',
     }

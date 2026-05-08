@@ -28,7 +28,7 @@ const suppliersSlice = createSlice({
       state.list.push(action.payload);
     },
     updateSupplier: (state, action) => {
-      const index = state.suppliers.findIndex((item) => item.id === action.payload.id);
+      const index = state.list.findIndex((item) => item.id === action.payload.id);
       if (index !== -1) {
         state.list[index] = {
           ...state.list[index],
@@ -37,7 +37,7 @@ const suppliersSlice = createSlice({
       }
     },
     removeSupplier: (state, action) => {
-      state.suppliers = state.list.filter((item) => item.id !== action.payload);
+      state.list = state.list.filter((item) => item.id !== action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -48,7 +48,7 @@ const suppliersSlice = createSlice({
       })
       .addCase(fetchSuppliers.fulfilled, (state, action) => {
         state.loading = false;
-        state.suppliers = action.payload;
+        state.list= action.payload;
       })
       .addCase(fetchSuppliers.rejected, (state, action) => {
         state.loading = false;
@@ -60,33 +60,43 @@ const suppliersSlice = createSlice({
 export const { addSupplier, updateSupplier, removeSupplier } = suppliersSlice.actions;
 
 // CRUD methods using axiosInstance in this slice file
-export const createSupplierAsync = (supplier) => async (dispatch) => {
-  try {
-    const response = await axiosInstance.post('/suppliers', supplier);
-    dispatch(addSupplier(response.data));
-    return response.data;
-  } catch (error) {
-    throw error?.response?.data?.message || error.message;
+export const createSupplierAsync = createAsyncThunk(
+  'suppliers/create',
+  async (supplier, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await axiosInstance.post('/suppliers', supplier);
+      dispatch(addSupplier(response.data));
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.message || error.message);
+    }
   }
-};
+);
 
-export const updateSupplierAsync = (supplier) => async (dispatch) => {
-  try {
-    const response = await axiosInstance.put(`/suppliers/${supplier.id}`, supplier);
-    dispatch(updateSupplier(response.data));
-    return response.data;
-  } catch (error) {
-    throw error?.response?.data?.message || error.message;
+export const updateSupplierAsync = createAsyncThunk(
+  'suppliers/update',
+  async (supplier, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await axiosInstance.put(`/suppliers/${supplier.id}`, supplier);
+      dispatch(updateSupplier(response.data));
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.message || error.message);
+    }
   }
-};
+);
 
-export const deleteSupplierAsync = (supplierId) => async (dispatch) => {
-  try {
-    await axiosInstance.delete(`/suppliers/${supplierId}`);
-    dispatch(removeSupplier(supplierId));
-  } catch (error) {
-    throw error?.response?.data?.message || error.message;
+export const deleteSupplierAsync = createAsyncThunk(
+  'suppliers/delete',
+  async (supplierId, { rejectWithValue, dispatch }) => {
+    try {
+      await axiosInstance.delete(`/suppliers/${supplierId}`);
+      dispatch(removeSupplier(supplierId));
+      return supplierId;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.message || error.message);
+    }
   }
-};
+);
 
 export default suppliersSlice.reducer;
