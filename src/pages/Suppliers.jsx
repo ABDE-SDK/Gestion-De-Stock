@@ -108,12 +108,13 @@ export default function Fournisseurs() {
         <div className='flex items-center gap-2'>
           <span className='text-sm text-gray-600'>Filtrer:</span>
           <input type='search' placeholder='Rechercher...' value={search} onChange={(e) => setSearchParams({search:e.target.value,searchBy},{replace:true})} />
-          <select value={searchBy} onChange={(e) => setSearchParams({search,searchBy:e.target.value},{replace:true})} className='px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 bg-white'>
+          <span>par</span><select value={searchBy} onChange={(e) => setSearchParams({search,searchBy:e.target.value},{replace:true})} className='px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500 bg-white'>
             <option value='name'>Nom</option>
             <option value='phone'>Contact</option>
             <option value='email'>Email</option>
             <option value='city'>Ville</option>
           </select>
+          <button onClick={()=>{setIsOpen(true)}} className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded">Ajouter un Fournisseur</button>
         </div>
       </div>
         {loading && <p className='text-sm text-gray-600'>Chargement...</p>}
@@ -182,7 +183,6 @@ export default function Fournisseurs() {
           <button onClick={()=>FileInputRef.current.click()} className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white text-sm font-medium px-4 py-2 rounded mx-3 my-5">Import sheet</button>
 
 <button onClick={handleExport} className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white text-sm font-medium px-4 py-2 rounded mx-3 my-5">Export sheet</button>
-<button onClick={()=>{setIsOpen(true)}} className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded"> Ajouter fournisseur</button>
    {isOpen ? <AjouterFournisseur onAdd={(e)=>handleAdd(e)} onClose={()=>{setIsOpen(false)}}/>:null}     
    </>
   );
