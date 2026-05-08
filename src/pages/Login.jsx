@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 import React, { useRef, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginUser } from '../Slices/authSlice';
+=======
+import { useDispatch } from 'react-redux';
+import { login } from '../app/Slices/authSlice';
+import { useNavigate } from 'react-router-dom';
+>>>>>>> a40d245bf7f2a86d02e0b8398eb355a489019ef5
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');

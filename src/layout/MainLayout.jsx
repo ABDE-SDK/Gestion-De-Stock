@@ -11,8 +11,9 @@ export default function MainLayout() {
         <Navbar />
 
         <main className="flex-1 overflow-y-auto p-8">
-          {/* هاد Outlet هو البلاصة فين غايتبدل المحتوى (Dashboard, Products...) */}
+
           <Outlet />
+          
         </main>
       </div>
     </div>

@@ -5,6 +5,9 @@ import Products from '../pages/Products';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Suppliers from '../pages/Suppliers';
+import Mouvements from '../pages/Mouvements';
+import Ventes from '../pages/Ventes';
+import Clients from '../pages/Clients'
 
 const AppRoutes = () => {
   return (
@@ -15,7 +18,14 @@ const AppRoutes = () => {
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="/products" element={<Products />} />
+<<<<<<< HEAD
         <Route path="/fournisseurs" element={<Suppliers />} />
+=======
+        <Route path="/suppliers" element={<Suppliers />} />
+        <Route path="/mouvements" element={<Mouvements />} />
+        <Route path="/ventes" element={<Ventes />} />
+        <Route path="/clients" element={<Clients />} />
+>>>>>>> a40d245bf7f2a86d02e0b8398eb355a489019ef5
       </Route>
 
     </Routes>
