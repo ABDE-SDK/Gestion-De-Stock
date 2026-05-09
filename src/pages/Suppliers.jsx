@@ -38,7 +38,7 @@ export default function Fournisseurs() {
   // Filtre local
   const suppliers=useMemo(()=>{
     if(!search.trim()) return allSuppliers;
-     return allSuppliers.filter(s=>s[searchBy].toLowerCase().toString().includes(search.toLowerCase()))
+     return allSuppliers.filter(s=>String(s[searchBy] ?? '').toLowerCase().includes(search.toLowerCase()))
   },
 [allSuppliers,search,searchBy])
 //exportation du fichier excel
