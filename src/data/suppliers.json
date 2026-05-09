@@ -1,0 +1,31 @@
+{
+  "suppliers": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "name": "Fournitures Dubois",
+      "phone": "01 23 45 67 89",
+      "email": "contact@dubois.fr",
+      "city": "Lyon",
+      "category": "Électronique"
+    },
+    {
+      "id": 2,
+      "user_id": 1,
+      "name": "Atelier Parisien",
+      "phone": "06 12 34 56 78",
+      "email": "info@atelierparisien.fr",
+      "city": "Paris",
+      "category": "Mobilier"
+    },
+    {
+      "id": 3,
+      "user_id": 2,
+      "name": "Matériel Pro Sud",
+      "phone": "04 98 76 54 32",
+      "email": "contact@materielprosud.fr",
+      "city": "Marseille",
+      "category": "Fournitures de bureau"
+    }
+  ]
+}

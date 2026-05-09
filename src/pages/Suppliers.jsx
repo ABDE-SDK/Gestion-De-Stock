@@ -13,9 +13,7 @@ export default function Fournisseurs() {
   // ajout de fournisseur
     const handleAdd = (e) => {
       e.preventDefault();
-      const nextId = suppliers.length > 0 ? suppliers[suppliers.length - 1].id + 1 : 1;
       dispatch(createSupplierAsync({
-        id:nextId,
         name:e.target.name.value,
         phone:e.target.phone.value,
         email:e.target.email.value,

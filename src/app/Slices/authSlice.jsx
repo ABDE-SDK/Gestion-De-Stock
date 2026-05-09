@@ -1,76 +1,77 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axiosInstance from '../../config/axiosConfig';
+import usersData from '../../data/users.json';
+
+let users = [...usersData.users];
 
 const initialState = {
   loading: false,
   user: null,
-  token: localStorage.getItem('token') || null,
   error: '',
 };
 
-export const loginUser=createAsyncThunk('auth/loginUser',
-    async({email,password},{rejectWithValue})=>{
-    try{
-     const response=await axiosInstance.post('/login',{email,password})
-     localStorage.setItem('token',response.data.token)
-     return response.data
-    }catch(error){
-        return rejectWithValue(error?.response?.data?.message)
-    }}
-)
-// 
-export const register=createAsyncThunk('auth/register',
-    async({username,email,password},{rejectWithValue})=>{
-    try{
-     const response=await axiosInstance.post('/register',{username,email,password})
-     return response.data
-    }catch(error){
-        return rejectWithValue(error?.response?.data?.message || error.message)
-    }}
-)
+export const login = createAsyncThunk('auth/login', async ({ email, password }, { rejectWithValue }) => {
+  const user = users.find((u) => u.email === email && u.password === password);
+  if (!user) {
+    return rejectWithValue('Invalid credentials');
+  }
+  return user;
+});
 
-export const authSlice =createSlice({
-    name:'auth',
-    initialState,
-    reducers:{
-        logout:(state)=>{
-            localStorage.removeItem("token")
-            state.token=null 
-            state.user=null
-        },
-        setCredentials:(state,action)=>{
-            // gestion de la persistance
-           state.user=action.payload.user
-           state.token=action.payload.token
-        }
+export const register = createAsyncThunk('auth/register', async ({ username, email, password }, { rejectWithValue }) => {
+  const existingUser = users.find((u) => u.email === email || u.username === username);
+  if (existingUser) {
+    return rejectWithValue('User already exists');
+  }
+  const newUser = {
+    id: users.length ? Math.max(...users.map((u) => u.id)) + 1 : 1,
+    username,
+    email,
+    password,
+    name: username,
+  };
+  users.push(newUser);
+  return newUser;
+});
+
+export const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    logout: (state) => {
+      state.user = null;
+      state.error = '';
     },
+    setCredentials: (state, action) => {
+      state.user = action.payload.user;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      // login extrareducer
-      .addCase(loginUser.pending, (state) => {
+      .addCase(login.pending, (state) => {
         state.loading = true;
+        state.error = '';
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.token = action.payload.token;
-        state.user = action.payload.user;
+        state.user = action.payload;
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       })
-      // register extrareducer
       .addCase(register.pending, (state) => {
         state.loading = true;
+        state.error = '';
       })
-      .addCase(register.fulfilled, (state, action) => {
+      .addCase(register.fulfilled, (state) => {
         state.loading = false;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
-      })
-  }});
+        state.error = action.payload || action.error.message;
+      });
+  },
+});
 
 export default authSlice.reducer;
 export const { logout, setCredentials } = authSlice.actions;

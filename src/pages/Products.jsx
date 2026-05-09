@@ -16,13 +16,14 @@ export default function Products() {
     const handleAdd=(e)=>{
         e.preventDefault()
         dispatch(addProductAsync({
-          id: allProducts[allProducts.length-1].id+1,
           name:e.target.name.value,
-          category:e.target.name.value,
-          barcode:Number(e.target.barcode.value),
+          category:e.target.category.value,
+          barcode:e.target.barcode.value,
           quantity:Number(e.target.quantity.value),
           price:Number(e.target.price.value),
-          supplier_id:Number(e.target.supplier_id.value)
+          min_stock:Number(e.target.min_stock.value),
+          supplier_id:Number(e.target.supplier_id.value),
+          user_id: 1 // Assuming user_id, need to get from auth
         }))
         setIsOpen(false)
     }

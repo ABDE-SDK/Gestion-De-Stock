@@ -1,28 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axiosInstance from '../../config/axiosConfig';
-const initialState = {
-  loading: false,
-  list: [],
-  error: '',
-};
+import suppliersData from '../../data/suppliers.json';
 
-export const fetchSuppliers = createAsyncThunk(
-  'suppliers/fetchAll',
-  async (userId, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.get('/suppliers',{params:{
-        user_id: userId
-      }});
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data?.message || error.message);
-    }
+let suppliers = [...suppliersData.suppliers];
+
+export const fetchSuppliers = createAsyncThunk('suppliers/fetchAll', async (userId, { rejectWithValue }) => {
+  try {
+    return userId ? suppliers.filter((s) => s.user_id === userId) : suppliers;
+  } catch (error) {
+    return rejectWithValue(error.message);
   }
-);
+});
 
 const suppliersSlice = createSlice({
   name: 'suppliers',
-  initialState,
+  initialState: { loading: false, list: [], error: '' },
   reducers: {
     addSupplier: (state, action) => {
       state.list.push(action.payload);
@@ -48,7 +39,7 @@ const suppliersSlice = createSlice({
       })
       .addCase(fetchSuppliers.fulfilled, (state, action) => {
         state.loading = false;
-        state.list= action.payload;
+        state.list = action.payload;
       })
       .addCase(fetchSuppliers.rejected, (state, action) => {
         state.loading = false;
@@ -59,44 +50,38 @@ const suppliersSlice = createSlice({
 
 export const { addSupplier, updateSupplier, removeSupplier } = suppliersSlice.actions;
 
-// CRUD methods using axiosInstance in this slice file
-export const createSupplierAsync = createAsyncThunk(
-  'suppliers/create',
-  async (supplier, { rejectWithValue, dispatch }) => {
-    try {
-      const response = await axiosInstance.post('/suppliers', supplier);
-      dispatch(addSupplier(response.data));
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data?.message || error.message);
-    }
+export const createSupplierAsync = createAsyncThunk('suppliers/create', async (supplier, { rejectWithValue, dispatch }) => {
+  try {
+    const newSupplier = {
+      ...supplier,
+      id: suppliers.length ? Math.max(...suppliers.map((s) => s.id)) + 1 : 1,
+    };
+    suppliers.push(newSupplier);
+    dispatch(addSupplier(newSupplier));
+    return newSupplier;
+  } catch (error) {
+    return rejectWithValue(error.message);
   }
-);
+});
 
-export const updateSupplierAsync = createAsyncThunk(
-  'suppliers/update',
-  async (supplier, { rejectWithValue, dispatch }) => {
-    try {
-      const response = await axiosInstance.put(`/suppliers/${supplier.id}`, supplier);
-      dispatch(updateSupplier(response.data));
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data?.message || error.message);
-    }
+export const updateSupplierAsync = createAsyncThunk('suppliers/update', async (supplier, { rejectWithValue, dispatch }) => {
+  try {
+    suppliers = suppliers.map((s) => (s.id === supplier.id ? supplier : s));
+    dispatch(updateSupplier(supplier));
+    return supplier;
+  } catch (error) {
+    return rejectWithValue(error.message);
   }
-);
+});
 
-export const deleteSupplierAsync = createAsyncThunk(
-  'suppliers/delete',
-  async (supplierId, { rejectWithValue, dispatch }) => {
-    try {
-      await axiosInstance.delete(`/suppliers/${supplierId}`);
-      dispatch(removeSupplier(supplierId));
-      return supplierId;
-    } catch (error) {
-      return rejectWithValue(error?.response?.data?.message || error.message);
-    }
+export const deleteSupplierAsync = createAsyncThunk('suppliers/delete', async (supplierId, { rejectWithValue, dispatch }) => {
+  try {
+    suppliers = suppliers.filter((s) => s.id !== supplierId);
+    dispatch(removeSupplier(supplierId));
+    return supplierId;
+  } catch (error) {
+    return rejectWithValue(error.message);
   }
-);
+});
 
 export default suppliersSlice.reducer;

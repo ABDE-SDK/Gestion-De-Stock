@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { register ,loginUser} from '../app/Slices/authSlice';
+import { register ,login} from '../app/Slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 const Register = () => {
   const dispatch = useDispatch(); 
@@ -57,7 +57,7 @@ const Register = () => {
   const password = e.target.password.value;
   try {
     await dispatch(register({ username, email, password })).unwrap();
-    await dispatch(loginUser({ email, password })).unwrap();
+    await dispatch(login({ email, password })).unwrap();
     navigate('/');
   } catch (error) {
     console.error("Erreur lors du processus :", error);
