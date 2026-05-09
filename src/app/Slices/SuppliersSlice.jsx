@@ -66,9 +66,11 @@ export const createSupplierAsync = createAsyncThunk('suppliers/create', async (s
 
 export const updateSupplierAsync = createAsyncThunk('suppliers/update', async (supplier, { rejectWithValue, dispatch }) => {
   try {
-    suppliers = suppliers.map((s) => (s.id === supplier.id ? supplier : s));
-    dispatch(updateSupplier(supplier));
-    return supplier;
+    const updatedSuppliers = suppliers.map((s) => (s.id === supplier.id ? { ...s, ...supplier } : s));
+    suppliers.splice(0, suppliers.length, ...updatedSuppliers);
+    const merged = updatedSuppliers.find((s) => s.id === supplier.id) || supplier;
+    dispatch(updateSupplier(merged));
+    return merged;
   } catch (error) {
     return rejectWithValue(error.message);
   }
@@ -76,7 +78,8 @@ export const updateSupplierAsync = createAsyncThunk('suppliers/update', async (s
 
 export const deleteSupplierAsync = createAsyncThunk('suppliers/delete', async (supplierId, { rejectWithValue, dispatch }) => {
   try {
-    suppliers = suppliers.filter((s) => s.id !== supplierId);
+    const updatedSuppliers = suppliers.filter((s) => s.id !== supplierId);
+    suppliers.splice(0, suppliers.length, ...updatedSuppliers);
     dispatch(removeSupplier(supplierId));
     return supplierId;
   } catch (error) {

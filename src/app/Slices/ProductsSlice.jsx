@@ -59,7 +59,8 @@ export const addProductAsync = createAsyncThunk('products/add', async (req, { re
 
 export const removeProductAsync = createAsyncThunk('products/delete', async (productId, { rejectWithValue, dispatch }) => {
   try {
-    products = products.filter((p) => p.id !== productId);
+    const updatedProducts = products.filter((p) => p.id !== productId);
+    products.splice(0, products.length, ...updatedProducts);
     dispatch(deleteProduct(productId));
     return productId;
   } catch (error) {
@@ -69,7 +70,8 @@ export const removeProductAsync = createAsyncThunk('products/delete', async (pro
 
 export const updateProductAsync = createAsyncThunk('products/update', async (product, { rejectWithValue, dispatch }) => {
   try {
-    products = products.map((p) => (p.id === product.id ? product : p));
+    const updatedProducts = products.map((p) => (p.id === product.id ? product : p));
+    products.splice(0, products.length, ...updatedProducts);
     dispatch(updateProduct(product));
     return product;
   } catch (error) {

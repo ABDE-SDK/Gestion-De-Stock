@@ -23,7 +23,7 @@ export default function Products() {
           price:Number(e.target.price.value),
           min_stock:Number(e.target.min_stock.value),
           supplier_id:Number(e.target.supplier_id.value),
-          user_id: 1 // Assuming user_id, need to get from auth
+          user_id: user?.id
         }))
         setIsOpen(false)
     }
@@ -46,7 +46,6 @@ export default function Products() {
       if(!search.trim()) return allProducts;
       else{
         if(searchBy == 'supplier'){
-            console.log(suppliers)
             const filtredSuppliers=suppliers.filter(s=>s["name"].toLowerCase().toString().includes(search.toLowerCase()))
             const supplierIds = filtredSuppliers.map((s) => s.id);
             return allProducts.filter(p=>supplierIds.includes(p.supplier_id))
@@ -61,7 +60,6 @@ export default function Products() {
         dispatch(fetchProducts(user?.id))
     }},[user?.id])
     function handleDelete(id){
-        console.log("deleted")
         dispatch(removeProductAsync(id))
     }
     const handleCancel=(id)=>{
@@ -78,7 +76,8 @@ export default function Products() {
             price:Number(e.target.price.value),
             quantity:Number(e.target.quantity.value),
             min_stock:Number(e.target.min_stock.value),
-            supplier_id:draft.supplier_id
+            supplier_id:Number(e.target.supplier_id.value),
+            user_id: user?.id
         }))
        setDraft({id:"",name:"",category:"",price:"",quantity:"",min_stock:"",barcode:"",supplier_id:""})
        setIsEditingId(null)     
@@ -90,35 +89,39 @@ export default function Products() {
        const ws=wb.Sheets[wb.SheetNames[0]]
        const raw=XLSX.utils.sheet_to_json(ws)
        raw.forEach(row=>{
+        if(!row.name || !row["code-barre"] || !row.fournisseur) return;
         const SupplierId=suppliers.find(s=>s.name===row.fournisseur)?.id
+        if(!SupplierId) return;
         const exists=allProducts.find(p=>p.barcode==String(row["code-barre"]))
-        if(SupplierId){
-           if(exists){
+        if(exists){
            dispatch(updateProductAsync({id:exists.id,
                                     name:row.name,
                                     category:row.category,
                                     barcode:String(row["code-barre"]),
-                                    price:Number(row.prix),
-                                    quantity:Number(row["quantité"]),
-                                    min_stock:Number(row["stock min"]),
-                                    user_id:user.id,
+                                    price:Number(row.prix) || 0,
+                                    quantity:Number(row["quantité"]) || 0,
+                                    min_stock:Number(row["stock min"]) || 0,
+                                    user_id:user?.id,
                                     supplier_id:SupplierId
            }))
            }
            else{
-           dispatch(addProductAsync({id:allProducts[allProducts.length-1].id+1,
+           dispatch(addProductAsync({
                                     name:row.name,
                                     category:row.category,
                                     barcode:String(row["code-barre"]),
-                                    price:Number(row.prix),
-                                    quantity:Number(row["quantité"]),
-                                    min_stock:Number(row["stock min"]),
-                                    user_id:user.id,
-                                    supplier_id:suppliers.find(s=>s.name==row.fournisseur).id
+                                    price:Number(row.prix) || 0,
+                                    quantity:Number(row["quantité"]) || 0,
+                                    min_stock:Number(row["stock min"]) || 0,
+                                    user_id:user?.id,
+                                    supplier_id:SupplierId
            }))
         }
-        }
        })
+       // Reload products after import
+       if (user?.id) {
+         dispatch(fetchProducts(user?.id));
+       }
     }
     const handleExport=()=>{
      const productsData=products.map(p=>({ "name" : p.name,
@@ -127,7 +130,7 @@ export default function Products() {
                                           "prix" :p.price,
                                           "quantité" : p.quantity,
                                           "stock min":p.min_stock,
-                                          "fournisseur":suppliers.find(s=>s.id===p.supplier_id)["name"]
+                                          "fournisseur":suppliers.find(s=>s.id===p.supplier_id)?.name || "N/A"
                                        }))
      const ws=XLSX.utils.json_to_sheet(productsData)
      const wb=XLSX.utils.book_new()

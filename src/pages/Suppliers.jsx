@@ -41,14 +41,13 @@ export default function Fournisseurs() {
 [allSuppliers,search,searchBy])
 //exportation du fichier excel
   const handleExport=()=>{
-   const suppliersData=suppliers.map(s=>(
-    {"name":s.name,
+    const suppliersData=suppliers.map(s=>({
+    "name":s.name,
      "email": s.email,
     "phone": s.phone,
     "city":s.city,
     "category":s.category
     }))
-    console.log(suppliersData)
    const ws=XLSX.utils.json_to_sheet(suppliersData)
    const wb=XLSX.utils.book_new()
    XLSX.utils.book_append_sheet(wb,ws,"Fournisseurs")
@@ -63,29 +62,33 @@ export default function Fournisseurs() {
    const wb=XLSX.read(buffer)
    const ws=wb.Sheets[wb.SheetNames[0]]
    const raw=XLSX.utils.sheet_to_json(ws)
-   raw.forEach(f=>{
-    const exists=allSuppliers.find(fournisseur=>fournisseur.email===f.email)
+   raw.forEach(row=>{
+    if(!row.name || !row.email || !row.phone) return;
+    const exists=allSuppliers.find(fournisseur=>fournisseur.email===row.email)
     if(exists){
-        dispatch(updateSupplierAsync({id:exists.id,
-          name:f.name,
-          phone:f.phone,
-          email:f.email,
-          city:f.city,
-          category:f.category,
-        }))
-    }
-    else{
-        dispatch(createSupplierAsync({id:allSuppliers[allSuppliers.length-1].id+1,
-          name:f.name,
-          phone:f.phone,
-          email:f.email,
-          city:f.city,
-          category:f.category,
-          user_id:user?.id
-        }))
+       dispatch(updateSupplierAsync({id:exists.id,
+                                name:row.name,
+                                phone:row.phone,
+                                email:row.email,
+                                city:row.city || '',
+                                category:row.category || '',
+       }))
+       }
+       else{
+       dispatch(createSupplierAsync({
+                                name:row.name,
+                                phone:row.phone,
+                                email:row.email,
+                                city:row.city || '',
+                                category:row.category || '',
+                                user_id:user?.id
+       }))
     }
    })
-
+   // Recharger les fournisseurs après l'import
+   if (user?.id) {
+     dispatch(fetchSuppliers(user?.id));
+   }
   }
   useEffect(() => {
     if (user?.id) {
@@ -125,7 +128,7 @@ export default function Fournisseurs() {
     };
     dispatch(updateSupplierAsync(updatedSupplier));
     setEditingId(null);
-  };
+  }
   return (<>
       <div className='flex items-center justify-between mb-4'>
         <h1 className='text-xl font-semibold text-gray-900'>Liste des fournisseurs</h1>
