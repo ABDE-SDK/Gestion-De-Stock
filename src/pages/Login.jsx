@@ -9,9 +9,9 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Kanchoufou ghi wach dakhhal ay 7aja
-    dispatch(login({ name: "Abderrahmane" }));
-    navigate('/'); // Siftu l-Dashboard
+    // Test login with demo credentials
+    dispatch(login({ email: 'testuser@example.com', password: 'password123' }));
+    navigate('/'); // Redirect to Dashboard
   };
 
   // 2. ضروري دير return للديزاين باش متبقاش الصفحة بيضا
