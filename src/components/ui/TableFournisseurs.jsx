@@ -4,7 +4,6 @@ export default function TableFournisseurs({
   loading, 
   error, 
   editingId, 
-  draft, 
   onEditClick, 
   onDelete, 
   onSubmit, 
@@ -32,23 +31,19 @@ export default function TableFournisseurs({
             <tr key={supplier.id}>
               {editingId === supplier.id ? (
                 // MODE ÉDITION
-                <>
-                  <td colSpan='5' className='px-4 py-3'>
-                    <form onSubmit={onSubmit} className='flex items-center gap-3'>
-                      <input name='name' className='flex-1 rounded border border-gray-300 px-2 py-1 text-sm' defaultValue={draft.name} placeholder='Nom' autoFocus />
-                      <input name='phone' className='flex-1 rounded border border-gray-300 px-2 py-1 text-sm' defaultValue={draft.phone} placeholder='Téléphone' />
-                      <input name='email' className='flex-1 rounded border border-gray-300 px-2 py-1 text-sm' defaultValue={draft.email} placeholder='Email' />
-                      <input name='city' className='flex-1 rounded border border-gray-300 px-2 py-1 text-sm' defaultValue={draft.city} placeholder='Ville' />
-                      <input name='category' className='flex-1 rounded border border-gray-300 px-2 py-1 text-sm' defaultValue={draft.category} placeholder='Catégorie' />
-                    </form>
-                  </td>
-                  <td className='px-4 py-3 whitespace-nowrap'>
+                <td colSpan='6' className='px-4 py-3'>
+                  <form onSubmit={onSubmit} className='flex flex-wrap items-center gap-3'>
+                    <input name='name' className='flex-1 min-w-[120px] rounded border border-gray-300 px-2 py-1 text-sm' defaultValue={supplier.name} placeholder='Nom' autoFocus />
+                    <input name='phone' className='flex-1 min-w-[120px] rounded border border-gray-300 px-2 py-1 text-sm' defaultValue={supplier.phone} placeholder='Téléphone' />
+                    <input name='email' className='flex-1 min-w-[120px] rounded border border-gray-300 px-2 py-1 text-sm' defaultValue={supplier.email} placeholder='Email' />
+                    <input name='city' className='flex-1 min-w-[120px] rounded border border-gray-300 px-2 py-1 text-sm' defaultValue={supplier.city} placeholder='Ville' />
+                    <input name='category' className='flex-1 min-w-[120px] rounded border border-gray-300 px-2 py-1 text-sm' defaultValue={supplier.category} placeholder='Catégorie' />
                     <div className='inline-flex items-center gap-2'>
-                      <button onClick={onSubmit} className='inline-flex items-center rounded bg-green-600 px-3 py-1 text-sm font-medium text-white hover:bg-green-700 whitespace-nowrap' type='button'>Valider</button>
+                      <button className='inline-flex items-center rounded bg-green-600 px-3 py-1 text-sm font-medium text-white hover:bg-green-700 whitespace-nowrap' type='submit'>Valider</button>
                       <button onClick={onCancel} className='inline-flex items-center rounded bg-gray-500 px-3 py-1 text-sm font-medium text-white hover:bg-gray-600 whitespace-nowrap' type='button'>Annuler</button>
                     </div>
-                  </td>
-                </>
+                  </form>
+                </td>
               ) : (
                 // MODE LECTURE
                 <>
