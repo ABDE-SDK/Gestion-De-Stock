@@ -11,7 +11,6 @@ export default function Products() {
     const search = searchParams.get('search') || ''
     const searchBy = searchParams.get('searchBy') || 'name'
     const [isOpen,setIsOpen]=useState(false)
-    const [draft,setDraft]=useState({id:"",name:"",category:"",price:"",quantity:"",min_stock:"",barcode:"",supplier_id:""})
     const [isEditingId,setIsEditingId]=useState(null)
     const handleAdd=(e)=>{
         e.preventDefault()
@@ -28,15 +27,6 @@ export default function Products() {
         setIsOpen(false)
     }
     const handleEditClick=(product)=>{
-    setDraft({id:product.id,
-        name:product.name,
-        category:product.category,
-        price:product.price,
-        quantity:product.quantity,
-        min_stock:product.min_stock,
-        barcode:product.barcode,
-        supplier_id:product.supplier_id
-    })
     setIsEditingId(product.id)
     }
     const dispatch=useDispatch()
@@ -63,24 +53,22 @@ export default function Products() {
         dispatch(removeProductAsync(id))
     }
     const handleCancel=(id)=>{
-        setDraft({id:"",name:"",category:"",price:"",quantity:"",min_stock:"",barcode:"",supplier_id:""})
         setIsEditingId(null)
     }
     const handleUpdate=(e)=>{
         e.preventDefault()
         dispatch(updateProductAsync({
-            id:draft.id,
+            id:isEditingId,
             name:e.target.name.value,
             category:e.target.category.value,
             barcode:e.target.barcode.value,
             price:Number(e.target.price.value),
             quantity:Number(e.target.quantity.value),
             min_stock:Number(e.target.min_stock.value),
-            supplier_id:Number(e.target.supplier_id.value),
+            supplier_id:Number(suppliers.find(s=>s.id==isEditingId).id),
             user_id: user?.id
         }))
-       setDraft({id:"",name:"",category:"",price:"",quantity:"",min_stock:"",barcode:"",supplier_id:""})
-       setIsEditingId(null)     
+        setIsEditingId(null)     
     }
     const handleImport=async (e)=>{
        const file=e.target.files[0]
@@ -156,7 +144,7 @@ export default function Products() {
                   <button onClick={()=>setIsOpen(true)} className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded">Ajouter Produit</button>
                 </div>
             </div>
-            <TableProduits products={products} error={error} loading={loading} onDelete={(id)=>handleDelete(id)} onEditClick={(e)=>handleEditClick(e)} isEditingId={isEditingId} draft={draft} onCancel={(id)=>handleCancel(id)} onUpdate={(e)=>handleUpdate(e)}/>
+            <TableProduits products={products} error={error} loading={loading} onDelete={(id)=>handleDelete(id)} onEditClick={(e)=>handleEditClick(e)} isEditingId={isEditingId}  onCancel={(id)=>handleCancel(id)} onUpdate={(e)=>handleUpdate(e)}/>
             {isOpen && <AjouterProduit onAdd={(e)=>handleAdd(e)} onClose={()=>setIsOpen(false)} suppliers={suppliers}/>}
       <input type='file' accept='.xlsx,.xls' className='hidden' ref={FileInputRef} onChange={(e)=>handleImport(e)}/>
           <button onClick={()=>FileInputRef.current.click()} className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white text-sm font-medium px-4 py-2 rounded mx-3 my-5">Import sheet</button> 
