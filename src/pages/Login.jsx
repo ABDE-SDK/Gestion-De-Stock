@@ -14,7 +14,6 @@ export default function Login() {
     navigate('/'); // Redirect to Dashboard
   };
 
-  // 2. ضروري دير return للديزاين باش متبقاش الصفحة بيضا
   return (
     <div className="flex h-screen items-center justify-center bg-slate-50">
       <form 

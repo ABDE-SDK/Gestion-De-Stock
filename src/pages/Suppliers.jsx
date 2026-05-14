@@ -5,6 +5,7 @@ import { useSearchParams} from 'react-router-dom';
 import AjouterFournisseur from '../components/ui/AjouterFournisseur.jsx';
 import TableFournisseurs from '../components/ui/TableFournisseurs.jsx';
 import * as XLSX from 'xlsx'
+
 export default function Fournisseurs() {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();

@@ -13,7 +13,11 @@ export const fetchProducts = createAsyncThunk('products/fetchAll', async (userId
 
 const ProductsSlice = createSlice({
   name: 'products',
-  initialState: { loading: false, list: [], error: null },
+  initialState: { 
+            loading: false,
+            list: [], 
+            error: null 
+  },
   reducers: {
     addProduct: (state, action) => {
       state.list.push(action.payload);
