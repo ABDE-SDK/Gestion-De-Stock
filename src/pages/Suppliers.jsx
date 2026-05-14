@@ -28,8 +28,6 @@ export default function Fournisseurs() {
   
   // ID du fournisseur en cours d'édition (null = aucun)
   const [editingId, setEditingId] = useState(null);
-  // Données temporaires pendant l'édition
-  const [draft, setDraft] = useState({ name: '', phone: '', email: '', city: '', category: '' });
   // Filtre
   const [searchParams, setSearchParams] = useSearchParams()
   const search = searchParams.get('search') || ''
@@ -102,25 +100,16 @@ export default function Fournisseurs() {
   // Active le mode édition
   const handleEditClick = (supplier) => {
     setEditingId(supplier.id);
-    setDraft({
-      id: supplier.id,
-      name: supplier.name,
-      phone: supplier.phone,
-      email: supplier.email,
-      city: supplier.city,
-      category: supplier.category || '',
-    });
   };
   // Annule l'édition
   const handleCancel = () => {
     setEditingId(null);
-    setDraft({ name: '', phone: '', email: '', city: '', category: '' });
   };
   // Soumet le formulaire (lit les valeurs directement depuis les inputs)
   const handleSubmit = (e) => {
     e.preventDefault();
     const updatedSupplier = {
-      id: draft.id,
+      id: editingId,
       name: e.target.name.value,
       phone: e.target.phone.value,
       email: e.target.email.value,
@@ -150,7 +139,6 @@ export default function Fournisseurs() {
           loading={loading}
           error={error}
           editingId={editingId}
-          draft={draft}
           onEditClick={handleEditClick}
           onDelete={handleDelete}
           onSubmit={handleSubmit}

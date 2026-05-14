@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useSelector ,useDispatch} from "react-redux"
 import { fetchSuppliers } from "../../app/Slices/SuppliersSlice"
 import { Edit3, Trash2, Check, X } from "lucide-react"
-export default function TableProduits({loading,products,error,onDelete,onUpdate,onCancel,onEditClick,isEditingId,draft}){
+export default function TableProduits({loading,products,error,onDelete,onUpdate,onCancel,onEditClick,isEditingId}){
     const dispatch=useDispatch()
     const suppliers=useSelector(state=>state.suppliers.list)
     const user=useSelector(state=>state.auth.user)
@@ -32,13 +32,13 @@ export default function TableProduits({loading,products,error,onDelete,onUpdate,
                   <tr key={p.id} className='bg-yellow-50'>
                     <td colSpan='8' className='px-3 py-2'>
                       <form className='flex items-center gap-2 text-xs' onSubmit={(e)=>onUpdate(e)}>
-                        <input name="name" className='w-24 rounded border border-gray-300 px-2 py-1' type="text" defaultValue={p.name} required maxLength={100}/>
-                        <input name="category" className='w-20 rounded border border-gray-300 px-2 py-1' type="text" defaultValue={p.category} maxLength={50}/>
-                        <input name="barcode" className='w-24 rounded border border-gray-300 px-2 py-1' type="text" defaultValue={p.barcode} pattern="\d{8,13}" title="8-13 chiffres" maxLength={13}/>
-                        <input name="price" className='w-16 rounded border border-gray-300 px-2 py-1' type="number" defaultValue={p.price} min="0" step="0.01" required/>
-                        <input name="quantity" className='w-16 rounded border border-gray-300 px-2 py-1' type="number" defaultValue={p.quantity} min="0" step="1" required/>
-                        <input name="min_stock" className='w-16 rounded border border-gray-300 px-2 py-1' type="number" defaultValue={p.min_stock} min="0" step="1" required/>
-                        <span className='w-20 truncate'>{suppliers && suppliers.find(s=>s.id===p.supplier_id)?.name }</span>
+                        <input name="name" className='w-30 rounded border border-gray-300 px-2 py-1' type="text" defaultValue={p.name} required maxLength={100}/>
+                        <input name="category" className='w-28 rounded border border-gray-300 px-2 py-1' type="text" defaultValue={p.category} maxLength={50}/>
+                        <input name="barcode" className='w-28 rounded border border-gray-300 px-2 py-1' type="text" defaultValue={p.barcode} pattern="\d{8,13}" title="8-13 chiffres" maxLength={13}/>
+                        <input name="price" className='w-26 rounded border border-gray-300 px-2 py-1' type="number" defaultValue={p.price} min="0" step="0.01" required/>
+                        <input name="quantity" className='w-26 rounded border border-gray-300 px-2 py-1' type="number" defaultValue={p.quantity} min="0" step="1" required/>
+                        <input name="min_stock" className='w-26 rounded border border-gray-300 px-2 py-1' type="number" defaultValue={p.min_stock} min="0" step="1" required/>
+                        <span className='w-26 truncate'>{suppliers && suppliers.find(s=>s.id===p.supplier_id)?.name }</span>
                         <div className='inline-flex items-center gap-1 whitespace-nowrap'>
                           <button onClick={()=>onCancel(p.id)} className='rounded bg-gray-500 px-2 py-1 text-xs font-medium text-white hover:bg-gray-600 flex items-center gap-1' type='button'><X size={14}/></button>
                           <button className='rounded bg-green-600 px-2 py-1 text-xs font-medium text-white hover:bg-green-700 flex items-center gap-1' type='submit'><Check size={14}/></button>
