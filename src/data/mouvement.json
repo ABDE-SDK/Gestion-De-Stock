@@ -1,0 +1,44 @@
+{
+  "mouvement": [
+    {
+      "id": 1,
+      "date": "2026-05-18 10:30",
+      "produit": "Plaquettes de frein Volvo FH",
+      "reference": "REF-VFH-001",
+      "type": "Entrée",
+      "quantite": 50,
+      "motif": "Achat Fournisseur (AutoParts EU)",
+      "utilisateur": "Abderrahmane"
+    },
+    {
+      "id": 2,
+      "date": "2026-05-18 14:15",
+      "produit": "Filtre à huile Scania R-Series",
+      "reference": "REF-SCR-002",
+      "type": "Sortie",
+      "quantite": 4,
+      "motif": "Vente (Facture #2026-089)",
+      "utilisateur": "Reda"
+    },
+    {
+      "id": 3,
+      "date": "2026-05-17 09:00",
+      "produit": "Batterie Varta ProMotive 225Ah",
+      "reference": "REF-BAT-004",
+      "type": "Sortie",
+      "quantite": 2,
+      "motif": "Vente (Facture #2026-088)",
+      "utilisateur": "Abderrahmane"
+    },
+    {
+      "id": 4,
+      "date": "2026-05-16 16:45",
+      "produit": "Pneu Michelin X Multi Way 3D",
+      "reference": "REF-PNE-003",
+      "type": "Entrée",
+      "quantite": 20,
+      "motif": "Achat Fournisseur (Michelin Maroc)",
+      "utilisateur": "Reda"
+    }
+  ]
+}
