@@ -1,31 +1,52 @@
 {
   "suppliers": [
     {
+      "id": 0,
+      "name": "Sans fournisseur",
+      "email": "",
+      "phone": "",
+      "address": "",
+      "category": "Divers"
+    },
+    {
       "id": 1,
-      "user_id": 1,
-      "name": "Fournitures Dubois",
-      "phone": "01 23 45 67 89",
-      "email": "contact@dubois.fr",
-      "city": "Lyon",
-      "category": "Électronique"
+      "name": "Truck Parts Maroc",
+      "email": "contact@truckparts.ma",
+      "phone": "0612345678",
+      "address": "Casablanca",
+      "category": "Freinage"
     },
     {
       "id": 2,
-      "user_id": 1,
-      "name": "Atelier Parisien",
-      "phone": "06 12 34 56 78",
-      "email": "info@atelierparisien.fr",
-      "city": "Paris",
-      "category": "Mobilier"
+      "name": "Atlas Pièces",
+      "email": "sales@atlaspieces.ma",
+      "phone": "0623456789",
+      "address": "Rabat",
+      "category": "Moteur"
     },
     {
       "id": 3,
-      "user_id": 2,
-      "name": "Matériel Pro Sud",
-      "phone": "04 98 76 54 32",
-      "email": "contact@materielprosud.fr",
-      "city": "Marseille",
-      "category": "Fournitures de bureau"
+      "name": "Nord Camion Services",
+      "email": "info@nordcamion.ma",
+      "phone": "0634567890",
+      "address": "Tanger",
+      "category": "Électricité"
+    },
+    {
+      "id": 4,
+      "name": "Meknes Auto Supply",
+      "email": "contact@meknesauto.ma",
+      "phone": "0645678901",
+      "address": "Meknès",
+      "category": "Suspension"
+    },
+    {
+      "id": 5,
+      "name": "Sahara Truck Equipements",
+      "email": "commercial@saharatruck.ma",
+      "phone": "0656789012",
+      "address": "Agadir",
+      "category": "Pneumatiques"
     }
   ]
 }

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Package, ArrowRightLeft, ShoppingCart, Truck, Users, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package, ArrowRightLeft, ShoppingCart, Truck, Users, Settings, LogOut } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../app/Slices/authSlice';
 import { useNavigate } from 'react-router-dom';
@@ -9,10 +9,11 @@ export default function Sidebar({ isCollapsed }) {
   const menuItems = [
     { name: 'Tableau de bord', path: '/', icon: LayoutDashboard },
     { name: 'Produits', path: '/products', icon: Package },
-    { name: 'Mouvements', path: '/mouvements', icon: ArrowRightLeft }, 
-    { name: 'Ventes', path: '/ventes', icon: ShoppingCart }, 
+    { name: 'Mouvements', path: '/stock-movements', icon: ArrowRightLeft }, 
+    { name: 'Ventes', path: '/sales', icon: ShoppingCart }, 
     { name: 'Fournisseurs', path: '/suppliers', icon: Truck }, 
-    { name: 'Clients', path: '/clients', icon: Users }, 
+    { name: 'Clients', path: '/customers', icon: Users },
+    { name: 'Paramètres', path: '/settings', icon: Settings }, 
   ];
 
   const dispatch = useDispatch();
@@ -52,7 +53,6 @@ export default function Sidebar({ isCollapsed }) {
             {/* الأيقونة كتبقى ديما، وزدنا ليها min-w-fit باش ماتعواجش */}
             <item.icon size={20} className="min-w-fit" />
             
-            {/* السمية كتبان غير يلا كان الـ Sidebar محلول */}
             {!isCollapsed && <span className="font-medium whitespace-nowrap">{item.name}</span>}
           </NavLink>
         ))}

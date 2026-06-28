@@ -1,0 +1,23 @@
+{
+  "sales": [
+    {
+      "id": 1,
+      "date": "2026-06-25",
+      "product": "Plaquettes de frein Volvo FH",
+      "reference": "REF-VFH-001",
+      "quantity": 2,
+      "price": 800,
+      "customer": "Transport Atlas"
+    },
+    {
+      "id": 2,
+      "date": "2026-06-25",
+      "product": "Filtre à huile Scania",
+      "reference": "REF-SCAN-002",
+      "quantity": 1,
+      "price": 250,
+      "customer": "Logistic Maroc"
+    }
+    
+  ]
+}

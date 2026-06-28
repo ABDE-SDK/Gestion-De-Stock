@@ -1,157 +1,309 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { register ,login} from '../app/Slices/authSlice';
-import { useNavigate } from 'react-router-dom';
-const Register = () => {
-  const dispatch = useDispatch(); 
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { register, login } from "../app/Slices/authSlice";
+import { Eye, EyeOff } from "lucide-react";
+
+export default function Register() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*?])(?=.*\d).{8,}$/;
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
-  const [invalidUsername, setInvalidUsername] = useState('');
-  const [invalidEmail, setInvalidEmail] = useState('');
-  const [invalidPass, setInvalidPass] = useState('');
-  const [inequalPass, setInequalPass] = useState('');
-  
-  const validateUsername = (e) => {
-    const value = e.target.value;
-    if (value && !usernameRegex.test(value)) {
-      setInvalidUsername('Username doit contenir 3-20 caractères (lettres, chiffres, _)');
+
+  const passRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*?])(?=.*\d).{8,}$/;
+
+  const emailRegex =
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  const usernameRegex =
+    /^[a-zA-Z0-9_]{3,20}$/;
+
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
+
+  const [invalidUsername, setInvalidUsername] = useState("");
+  const [invalidEmail, setInvalidEmail] = useState("");
+  const [invalidPass, setInvalidPass] = useState("");
+  const [inequalPass, setInequalPass] = useState("");
+
+  const [showPassword, setShowPassword] =
+    useState(false);
+
+  const [showConfirmPassword,
+    setShowConfirmPassword] =
+    useState(false);
+
+  const validateUsername = (value) => {
+    setUsername(value);
+
+    if (
+      value &&
+      !usernameRegex.test(value)
+    ) {
+      setInvalidUsername(
+        "Username doit contenir 3-20 caractères (lettres, chiffres, _)"
+      );
     } else {
-      setInvalidUsername('');
+      setInvalidUsername("");
     }
   };
-  
-  const validateEmail = (e) => {
-    const value = e.target.value;
-    if (value && !emailRegex.test(value)) {
-      setInvalidEmail('Email non valide');
+
+  const validateEmail = (value) => {
+    setEmail(value);
+
+    if (
+      value &&
+      !emailRegex.test(value)
+    ) {
+      setInvalidEmail(
+        "Email non valide"
+      );
     } else {
-      setInvalidEmail('');
+      setInvalidEmail("");
     }
   };
-  
-  const validatePass = (e) => {
-    const value = e.target.value;
-    if (value && !passRegex.test(value)) {
-      setInvalidPass('Le mot de passe doit contenir au minimum 8 caractères avec 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial (!@#$%&*?)');
+
+  const validatePassword = (value) => {
+    setPassword(value);
+
+    if (
+      value &&
+      !passRegex.test(value)
+    ) {
+      setInvalidPass(
+        "Minimum 8 caractères avec majuscule, minuscule, chiffre et caractère spécial."
+      );
     } else {
-      setInvalidPass('');
+      setInvalidPass("");
+    }
+
+    if (
+      confirmPass &&
+      value !== confirmPass
+    ) {
+      setInequalPass(
+        "Les mots de passe ne correspondent pas"
+      );
+    } else {
+      setInequalPass("");
     }
   };
-  
-  const verifyEqualPass = (e) => {
-    const confirmPass = e.target.value;
-    const password = document.getElementById('password').value;
-    if (confirmPass && confirmPass !== password) {
-      setInequalPass('Les mots de passe ne correspondent pas');
-    } else {
-      setInequalPass('');
+
+  const validateConfirmPassword =
+    (value) => {
+      setConfirmPass(value);
+
+      if (
+        value &&
+        value !== password
+      ) {
+        setInequalPass(
+          "Les mots de passe ne correspondent pas"
+        );
+      } else {
+        setInequalPass("");
+      }
+    };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    if (
+      invalidUsername ||
+      invalidEmail ||
+      invalidPass ||
+      inequalPass
+    ) {
+      return;
+    }
+
+    try {
+      await dispatch(
+        register({
+          username,
+          email,
+          password,
+        })
+      ).unwrap();
+
+      await dispatch(
+        login({
+          email,
+          password,
+        })
+      ).unwrap();
+
+      navigate("/");
+    } catch (error) {
+      console.log(error);
     }
   };
- async function handleRegister(e) {
-  e.preventDefault();
-  const username = e.target.username.value;
-  const email = e.target.email.value;
-  const password = e.target.password.value;
-  try {
-    await dispatch(register({ username, email, password })).unwrap();
-    await dispatch(login({ email, password })).unwrap();
-    navigate('/');
-  } catch (error) {
-    console.error("Erreur lors du processus :", error);
-  }
-}
+
   return (
-    <div className='flex items-center justify-center min-h-screen bg-green-50'>
-      <div className='bg-white p-6 shadow-lg w-full max-w-sm'>
-        <h1 className='text-2xl font-bold mb-4 text-center text-gray-800'>S'inscrire</h1>
+    <div className="min-h-screen flex justify-center items-center bg-slate-100">
 
-        <form className='space-y-2' onSubmit={(e)=>handleRegister(e)}>
-          <div>
-            <label className='block text-sm font-medium mb-0.5 text-gray-700'>Nom d'utilisateur</label>
-            <input
-              type='text'
-              placeholder='votre_username'
-              className={`w-full border rounded px-3 py-1.5 text-sm focus:outline-none ${
-                invalidUsername ? 'border-red-500' : 'border-gray-300 focus:border-green-500'
-              }`}
-              id="username"
-              name="username"
-              onChange={validateUsername}
-              required
-            />
-            <div className='min-h-4 mt-1'>{invalidUsername && <span className='text-red-600 text-xs block leading-tight'>{invalidUsername}</span>}</div>
-          </div>
+      <form
+        onSubmit={handleRegister}
+        className="bg-white p-8 rounded-2xl shadow-lg w-96 flex flex-col gap-4"
+      >
+        <h1 className="text-2xl font-bold text-center">
+          Inscription
+        </h1>
 
-          <div>
-            <label className='block text-sm font-medium mb-0.5 text-gray-700'>Email</label>
-            <input
-              type='email'
-              placeholder='votre@email.com'
-              className={`w-full border rounded px-3 py-1.5 text-sm focus:outline-none ${
-                invalidEmail ? 'border-red-500' : 'border-gray-300 focus:border-green-500'
-              }`}
-              id="email"
-              name="email"
-              onChange={validateEmail}
-              required
-            />
-            <div className='min-h-4 mt-1'>{invalidEmail && <span className='text-red-600 text-xs block leading-tight'>{invalidEmail}</span>}</div>
-          </div>
+        <input
+          type="text"
+          placeholder="Nom d'utilisateur"
+          value={username}
+          onChange={(e) =>
+            validateUsername(
+              e.target.value
+            )
+          }
+          className={`border rounded-xl px-4 py-3 ${
+            invalidUsername
+              ? "border-red-500"
+              : "border-gray-300"
+          }`}
+          required
+        />
 
-          <div>
-            <label className='block text-sm font-medium mb-0.5 text-gray-700'>Mot de passe</label>
-            <input
-              type='password'
-              placeholder='Min 8 caractères'
-              className={`w-full border rounded px-3 py-1.5 text-sm focus:outline-none ${
-                invalidPass ? 'border-red-500' : 'border-gray-300 focus:border-green-500'
-              }`}
-              id="password"
-              name="password"
-              onChange={validatePass}
-              required
-            />
-            <div className='min-h-4 mt-1'>{invalidPass && <span className='text-red-600 text-xs block leading-tight'>{invalidPass}</span>}</div>
-          </div>
+        {invalidUsername && (
+          <p className="text-red-500 text-sm">
+            {invalidUsername}
+          </p>
+        )}
 
-          <div>
-            <label className='block text-sm font-medium mb-0.5 text-gray-700'>Confirmer</label>
-            <input
-              type='password'
-              placeholder='Confirmer'
-              className={`w-full border rounded px-3 py-1.5 text-sm focus:outline-none ${
-                inequalPass ? 'border-red-500' : 'border-gray-300 focus:border-green-500'
-              }`}
-              id="confirm_pass"
-              name='confirm_pass'
-              onChange={verifyEqualPass}
-              required
-            />
-            <div className='min-h-4 mt-1'>{inequalPass && <span className='text-red-600 text-xs block leading-tight'>{inequalPass}</span>}</div>
-          </div>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) =>
+            validateEmail(
+              e.target.value
+            )
+          }
+          className={`border rounded-xl px-4 py-3 ${
+            invalidEmail
+              ? "border-red-500"
+              : "border-gray-300"
+          }`}
+          required
+        />
 
-          <div className='pt-1'>
-            <button
-              type='submit'
-              className='w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded font-medium text-sm'
-            >
-              S'inscrire
-            </button>
-          </div>
-        </form>
-        
-        <p className='text-sm text-gray-600 text-center mt-4'>
-          Déjà inscrit ?{' '}
-          <Link to="/login" className='text-green-600 hover:text-green-700 font-medium'>
+        {invalidEmail && (
+          <p className="text-red-500 text-sm">
+            {invalidEmail}
+          </p>
+        )}
+
+        <div className="relative">
+          <input
+            type={
+              showPassword
+                ? "text"
+                : "password"
+            }
+            placeholder="Mot de passe"
+            value={password}
+            onChange={(e) =>
+              validatePassword(
+                e.target.value
+              )
+            }
+            className={`border rounded-xl px-4 py-3 w-full pr-12 ${
+              invalidPass
+                ? "border-red-500"
+                : "border-gray-300"
+            }`}
+            required
+          />
+
+          <button
+            type="button"
+            onClick={() =>
+              setShowPassword(
+                !showPassword
+              )
+            }
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+          >
+            {showPassword ? (
+              <EyeOff size={20} />
+            ) : (
+              <Eye size={20} />
+            )}
+          </button>
+        </div>
+
+        {invalidPass && (
+          <p className="text-red-500 text-sm">
+            {invalidPass}
+          </p>
+        )}
+
+        <div className="relative">
+          <input
+            type={
+              showConfirmPassword
+                ? "text"
+                : "password"
+            }
+            placeholder="Confirmer le mot de passe"
+            value={confirmPass}
+            onChange={(e) =>
+              validateConfirmPassword(
+                e.target.value
+              )
+            }
+            className={`border rounded-xl px-4 py-3 w-full pr-12 ${
+              inequalPass
+                ? "border-red-500"
+                : "border-gray-300"
+            }`}
+            required
+          />
+
+          <button
+            type="button"
+            onClick={() =>
+              setShowConfirmPassword(
+                !showConfirmPassword
+              )
+            }
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+          >
+            {showConfirmPassword ? (
+              <EyeOff size={20} />
+            ) : (
+              <Eye size={20} />
+            )}
+          </button>
+        </div>
+
+        {inequalPass && (
+          <p className="text-red-500 text-sm">
+            {inequalPass}
+          </p>
+        )}
+
+        <button
+          className="bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition"
+        >
+          S'inscrire
+        </button>
+
+        <p className="text-center text-sm text-slate-600">
+          Déjà un compte ?{" "}
+          <Link
+            to="/login"
+            className="text-blue-600 font-medium hover:underline"
+          >
             Se connecter
           </Link>
         </p>
-      </div>
+
+      </form>
     </div>
   );
-};
-
-export default Register;
+}

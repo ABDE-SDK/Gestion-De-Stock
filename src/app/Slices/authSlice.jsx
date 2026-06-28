@@ -1,77 +1,115 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import usersData from '../../data/users.json';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import usersData from "../../data/users.json";
 
 let users = [...usersData.users];
 
 const initialState = {
+  user: JSON.parse(localStorage.getItem("user")) || null,
   loading: false,
-  user: null,
-  error: '',
+  error: null,
 };
 
-export const login = createAsyncThunk('auth/login', async ({ email, password }, { rejectWithValue }) => {
-  const user = users.find((u) => u.email === email && u.password === password);
-  if (!user) {
-    return rejectWithValue('Invalid credentials');
-  }
-  return user;
-});
+export const login = createAsyncThunk(
+  "auth/login",
+  async ({ email, password }, { rejectWithValue }) => {
+    const user = users.find(
+      (u) => u.email === email && u.password === password
+    );
 
-export const register = createAsyncThunk('auth/register', async ({ username, email, password }, { rejectWithValue }) => {
-  const existingUser = users.find((u) => u.email === email || u.username === username);
-  if (existingUser) {
-    return rejectWithValue('User already exists');
-  }
-  const newUser = {
-    id: users.length ? Math.max(...users.map((u) => u.id)) + 1 : 1,
-    username,
-    email,
-    password,
-    name: username,
-  };
-  users.push(newUser);
-  return newUser;
-});
+    if (!user) {
+      return rejectWithValue(
+        "Email ou mot de passe incorrect."
+      );
+    }
 
-export const authSlice = createSlice({
-  name: 'auth',
+    return user;
+  }
+);
+
+export const register = createAsyncThunk(
+  "auth/register",
+  async (
+    { username, email, password },
+    { rejectWithValue }
+  ) => {
+    const existingUser = users.find(
+      (u) =>
+        u.email === email ||
+        u.username === username
+    );
+
+    if (existingUser) {
+      return rejectWithValue(
+        "Utilisateur déjà existant."
+      );
+    }
+
+    const newUser = {
+      id: Date.now(),
+      username,
+      email,
+      password,
+      name: username,
+    };
+
+    users.push(newUser);
+
+    return newUser;
+  }
+);
+
+const authSlice = createSlice({
+  name: "auth",
   initialState,
+
   reducers: {
     logout: (state) => {
       state.user = null;
-      state.error = '';
-    },
-    setCredentials: (state, action) => {
-      state.user = action.payload.user;
+      state.error = null;
+
+      localStorage.removeItem("user");
     },
   },
+
   extraReducers: (builder) => {
     builder
+
       .addCase(login.pending, (state) => {
         state.loading = true;
-        state.error = '';
+        state.error = null;
       })
+
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify(action.payload)
+        );
       })
+
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || action.error.message;
+        state.error = action.payload;
       })
+
       .addCase(register.pending, (state) => {
         state.loading = true;
-        state.error = '';
+        state.error = null;
       })
+
       .addCase(register.fulfilled, (state) => {
         state.loading = false;
       })
+
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || action.error.message;
+        state.error = action.payload;
       });
   },
 });
 
+export const { logout } = authSlice.actions;
+
 export default authSlice.reducer;
-export const { logout, setCredentials } = authSlice.actions;

@@ -3,9 +3,9 @@ import suppliersData from '../../data/suppliers.json';
 
 let suppliers = [...suppliersData.suppliers];
 
-export const fetchSuppliers = createAsyncThunk('suppliers/fetchAll', async (userId, { rejectWithValue }) => {
+export const fetchSuppliers = createAsyncThunk('suppliers/fetchAll', async ( { rejectWithValue }) => {
   try {
-    return userId ? suppliers.filter((s) => s.user_id === userId) : suppliers;
+    return suppliers;
   } catch (error) {
     return rejectWithValue(error.message);
   }

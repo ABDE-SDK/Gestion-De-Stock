@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo,useRef } from 'react';
+import { useState, useMemo,useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSuppliers, deleteSupplierAsync, updateSupplierAsync ,createSupplierAsync} from '../app/Slices/SuppliersSlice.jsx';
 import { useSearchParams} from 'react-router-dom';
@@ -89,11 +89,6 @@ export default function Fournisseurs() {
      dispatch(fetchSuppliers(user?.id));
    }
   }
-  useEffect(() => {
-    if (user?.id) {
-      dispatch(fetchSuppliers(user.id));
-    }
-  }, [dispatch, user?.id]);
   const handleDelete = (id) => {
     dispatch(deleteSupplierAsync(id));
   };

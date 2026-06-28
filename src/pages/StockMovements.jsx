@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
     ArrowDownRight,
     ArrowUpRight,
@@ -7,12 +7,10 @@ import {
     Filter
 } from 'lucide-react';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchMouvements } from '../app/Slices/MouvementsSlice';
+import {  useSelector } from 'react-redux';
 
-export default function Mouvements() {
+export default function StockMovements() {
 
-    const dispatch = useDispatch();
 
     const {
         list: mouvementsData = [],
@@ -23,9 +21,6 @@ export default function Mouvements() {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterType, setFilterType] = useState('Tous');
 
-    useEffect(() => {
-        dispatch(fetchMouvements());
-    }, []);
 
     const filteredMouvements = mouvementsData.filter((mouv) => {
 
@@ -216,7 +211,7 @@ export default function Mouvements() {
                                         </td>
 
                                         <td
-                                            className="p-4 text-sm text-slate-600 max-w-[200px] truncate"
+                                            className="p-4 text-sm text-slate-600 max-w-50 truncate"
                                             title={mouv.motif}
                                         >
                                             {mouv.motif}

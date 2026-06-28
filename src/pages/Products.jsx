@@ -1,10 +1,11 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useMemo, useRef } from "react";
 import TableProduits from "../components/ui/TableProduits";
 import AjouterProduit from "../components/ui/AjouterProduit.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, removeProductAsync, updateProductAsync, addProductAsync } from "../app/Slices/ProductsSlice";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import * as XLSX from 'xlsx'
+
 export default function Products() {
     const FileInputRef = useRef()
     const [searchParams, setSearchParams] = useSearchParams()
@@ -44,17 +45,13 @@ export default function Products() {
                 return allProducts.filter(p => p[searchBy].toLowerCase().includes(search.toLowerCase()))
             }
         }
-    }, [allProducts, searchBy, search])
+    }, [allProducts, searchBy, search, suppliers])
     const user = useSelector(state => state.auth.user)
-    useEffect(() => {
-        if (user?.id) {
-            dispatch(fetchProducts(user?.id))
-        }
-    }, [user?.id])
+    
     function handleDelete(id) {
         dispatch(removeProductAsync(id))
     }
-    const handleCancel = (id) => {
+    const handleCancel = () => {
         setIsEditingId(null)
     }
     const handleUpdate = (e) => {
@@ -148,7 +145,7 @@ export default function Products() {
                     <button onClick={() => setIsOpen(true)} className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded">Ajouter Produit</button>
                 </div>
             </div>
-            <TableProduits products={products} error={error} loading={loading} onDelete={(id) => handleDelete(id)} onEditClick={(e) => handleEditClick(e)} isEditingId={isEditingId} onCancel={(id) => handleCancel(id)} onUpdate={(e) => handleUpdate(e)} />
+            <TableProduits products={products} error={error} loading={loading} onDelete={(id) => handleDelete(id)} onEditClick={(e) => handleEditClick(e)} isEditingId={isEditingId} onCancel={() => handleCancel()} onUpdate={(e) => handleUpdate(e)} />
             {isOpen && <AjouterProduit onAdd={(e) => handleAdd(e)} onClose={() => setIsOpen(false)} suppliers={suppliers} />}
             <input type='file' accept='.xlsx,.xls' className='hidden' ref={FileInputRef} onChange={(e) => handleImport(e)} />
             <button onClick={() => FileInputRef.current.click()} className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white text-sm font-medium px-4 py-2 rounded mx-3 my-5">Import sheet</button>
