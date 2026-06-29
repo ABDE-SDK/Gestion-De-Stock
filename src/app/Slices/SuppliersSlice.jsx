@@ -3,7 +3,7 @@ import suppliersData from '../../data/suppliers.json';
 
 let suppliers = [...suppliersData.suppliers];
 
-export const fetchSuppliers = createAsyncThunk('suppliers/fetchAll', async ( { rejectWithValue }) => {
+export const fetchSuppliers = createAsyncThunk('suppliers/fetchAll', async ( _,{ rejectWithValue }) => {
   try {
     return suppliers;
   } catch (error) {

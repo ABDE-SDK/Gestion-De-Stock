@@ -3,13 +3,14 @@ import productsData from '../../data/products.json';
 
 let products = [...productsData.products];
 
-export const fetchProducts = createAsyncThunk('products/fetchAll', async ( { rejectWithValue }) => {
+export const fetchProducts = createAsyncThunk('products/fetchAll', async (_, { rejectWithValue }) => {
   try {
     return products;
   } catch (err) {
     return rejectWithValue(err.message);
   }
 });
+console.log(productsData);
 
 const ProductsSlice = createSlice({
   name: 'products',

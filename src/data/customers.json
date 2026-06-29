@@ -1,0 +1,84 @@
+{
+  "customers": [
+    {
+      "id": 1,
+      "name": "Hmad Mansouri",
+      "phone": "0612345678",
+      "email": "hmad.mansouri@gmail.com",
+      "address": "Casablanca",
+      "credit": 0
+    },
+    {
+      "id": 2,
+      "name": "Mohamed El Alami",
+      "phone": "0623456789",
+      "email": "mohamed.alami@gmail.com",
+      "address": "Rabat",
+      "credit": 1200
+    },
+    {
+      "id": 3,
+      "name": "Youssef Benali",
+      "phone": "0634567890",
+      "email": "youssef.benali@gmail.com",
+      "address": "Marrakech",
+      "credit": 0
+    },
+    {
+      "id": 4,
+      "name": "Karim Tazi",
+      "phone": "0645678901",
+      "email": "karim.tazi@gmail.com",
+      "address": "Agadir",
+      "credit": 850
+    },
+    {
+      "id": 5,
+      "name": "Rachid Berrada",
+      "phone": "0656789012",
+      "email": "rachid.berrada@gmail.com",
+      "address": "Fès",
+      "credit": 0
+    },
+    {
+      "id": 6,
+      "name": "Omar Chraibi",
+      "phone": "0667890123",
+      "email": "omar.chraibi@gmail.com",
+      "address": "Tanger",
+      "credit": 500
+    },
+    {
+      "id": 7,
+      "name": "Said Amrani",
+      "phone": "0678901234",
+      "email": "said.amrani@gmail.com",
+      "address": "Meknès",
+      "credit": 0
+    },
+    {
+      "id": 8,
+      "name": "Mustapha Lahlou",
+      "phone": "0689012345",
+      "email": "mustapha.lahlou@gmail.com",
+      "address": "Oujda",
+      "credit": 1500
+    },
+    {
+      "id": 9,
+      "name": "Abdelhak Naciri",
+      "phone": "0690123456",
+      "email": "abdelhak.naciri@gmail.com",
+      "address": "Kenitra",
+      "credit": 300
+    },
+    {
+      "id": 10,
+      "name": "Hamid Bennis",
+      "phone": "0611122233",
+      "email": "hamid.bennis@gmail.com",
+      "address": "El Jadida",
+      "credit": 0
+    }
+  ]
+}

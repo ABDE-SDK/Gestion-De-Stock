@@ -46,13 +46,13 @@ export default function ProductsTable({ isLoading, error, products, suppliers, e
 
           return (
             <tr key={product.id}>
-              <td className="px-3 py-2 text-base text-gray-900">{product.name}</td>
-              <td className="px-3 py-2 text-base text-gray-700">{product.category}</td>
-              <td className="px-3 py-2 text-base text-gray-700 font-mono text-sm">{product.barcode}</td>
-              <td className="px-3 py-2 text-base text-gray-700">{product.price}€</td>
-              <td className="px-3 py-2 text-base text-gray-700">{product.quantity}</td>
-              <td className="px-3 py-2 text-base text-gray-700">{product.min_stock}</td>
-              <td className="px-3 py-2 text-base text-gray-700">{supplierName}</td>
+              <td className="px-3 py-2text-sm text-gray-900">{product.name}</td>
+              <td className="px-3 py-2text-sm text-gray-700">{product.category}</td>
+              <td className="px-3 py-2text-sm text-gray-700 font-mono text-sm">{product.barcode}</td>
+              <td className="px-3 py-2text-sm text-gray-700">{product.price}€</td>
+              <td className="px-3 py-2text-sm text-gray-700">{product.quantity}</td>
+              <td className="px-3 py-2text-sm text-gray-700">{product.min_stock}</td>
+              <td className="px-3 py-2text-sm text-gray-700">{supplierName}</td>
               <td className="whitespace-nowrap px-3 py-2 text-sm text-gray-700">
                 <button type="button" onClick={() => onDeleteProduct(product.id)} className="mr-1 inline-flex items-center gap-1 rounded bg-red-500 px-2 py-1 text-sm font-medium text-white hover:bg-red-600">
                   <Trash2 size={14} />
